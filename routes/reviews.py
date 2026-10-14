@@ -27,7 +27,7 @@ def list_reviews(
 
     query = query.offset(skip).limit(limit)
 
-    reviews = session.execute(query).all()
+    reviews = session.exec(query).all()
     return reviews
 
 @router.get("/average/{play_name}", response_model=AverageRatingRead)
@@ -80,10 +80,3 @@ def delete_review(review_id:int, session: Session = Depends(get_session)):
     session.delete(review)
     session.commit()
     return {"detail": f"Review with id {review_id} deleted"}
-    update_data = update.model_dump(exclude_unset=True)
-    for key,value in update_data.items():
-        setattr(review,key,value)
-
-    session.add(review)
-    session.commit()
-    return{"message": f"Review with id {review_id} updated successfully", "review": review}
